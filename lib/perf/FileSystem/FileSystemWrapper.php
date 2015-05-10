@@ -3,7 +3,7 @@
 namespace perf\FileSystem;
 
 /**
- *
+ * Low-level wrapper for file-system functions.
  *
  */
 class FileSystemWrapper
@@ -122,6 +122,18 @@ class FileSystemWrapper
     public function rename($pathOld, $pathNew)
     {
         return rename($pathOld, $pathNew);
+    }
+
+    /**
+     *
+     *
+     * @param string $pathSource
+     * @param string $pathDestination
+     * @return bool
+     */
+    public function copy($pathSource, $pathDestination)
+    {
+        return copy($pathSource, $pathDestination);
     }
 
     /**
