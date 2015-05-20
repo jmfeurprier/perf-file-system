@@ -48,6 +48,28 @@ class FileSystemWrapper
      * @param string $path
      * @return bool
      */
+    public function isLink($path)
+    {
+        return is_link($path);
+    }
+
+    /**
+     *
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isReadable($path)
+    {
+        return is_readable($path);
+    }
+
+    /**
+     *
+     *
+     * @param string $path
+     * @return bool
+     */
     public function isWritable($path)
     {
         return is_writable($path);
@@ -145,5 +167,28 @@ class FileSystemWrapper
     public function delete($path)
     {
         return unlink($path);
+    }
+
+    /**
+     *
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isUploadedFile($path)
+    {
+        return is_uploaded_file($path);
+    }
+
+    /**
+     *
+     *
+     * @param string $sourcePath
+     * @param string $destinationPath
+     * @return bool
+     */
+    public function moveUploadedFile($sourcePath, $destinationPath)
+    {
+        return move_uploaded_file($sourcePath, $destinationPath);
     }
 }
