@@ -27,6 +27,17 @@ class RecursiveDirectoryRemover
     }
 
     /**
+     * Static constructor.
+     *
+     * @param FileSystemWrapper $wrapper
+     * @return RecursiveDirectoryRemover
+     */
+    public static function create(FileSystemWrapper $wrapper)
+    {
+        return new self($wrapper);
+    }
+
+    /**
      * Constructor.
      *
      * @param FileSystemWrapper $fileSystemWrapper
