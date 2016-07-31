@@ -41,9 +41,8 @@ class RecursiveDirectoryRemover
      * Constructor.
      *
      * @param FileSystemWrapper $fileSystemWrapper
-     * @return void
      */
-    private function __construct(FileSystemWrapper $fileSystemWrapper)
+    public function __construct(FileSystemWrapper $fileSystemWrapper)
     {
         $this->fileSystemWrapper = $fileSystemWrapper;
     }
