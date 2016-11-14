@@ -20,7 +20,7 @@
 		</if>
 	</target>
 
-	<target name="lint" description="Performs syntax check of sourcecode files">
+	<target name="lint">
 		<phplint haltonfailure="true">
 			<fileset dir="${rootdir}">
 				<include name="src/" />

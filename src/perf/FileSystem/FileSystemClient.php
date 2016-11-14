@@ -189,7 +189,7 @@ class FileSystemClient
      */
     public function rename($oldPath, $newPath)
     {
-        if (!$this->wrapper->copy($oldPath, $newPath)) {
+        if (!$this->wrapper->rename($oldPath, $newPath)) {
             throw new \RuntimeException("Failed to rename file from '{$oldPath}' to '{$newPath}'.");
         }
     }
