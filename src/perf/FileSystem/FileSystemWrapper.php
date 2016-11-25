@@ -24,6 +24,17 @@ class FileSystemWrapper
      *
      *
      * @param string $path
+     * @return int|bool
+     */
+    public function fileSize($path)
+    {
+        return filesize($path);
+    }
+
+    /**
+     *
+     *
+     * @param string $path
      * @return bool
      */
     public function isDirectory($path)

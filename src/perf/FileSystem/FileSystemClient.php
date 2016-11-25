@@ -51,6 +51,24 @@ class FileSystemClient
      *
      *
      * @param string $path
+     * @return int
+     * @throws \RuntimeException
+     */
+    public function fileSize($path)
+    {
+        $size = $this->wrapper->fileSize($path);
+
+        if (false === $size) {
+            throw new \RuntimeException("Failed to get size of file at '{$path}'.");
+        }
+
+        return $size;
+    }
+
+    /**
+     *
+     *
+     * @param string $path
      * @return bool
      */
     public function isDirectory($path)
