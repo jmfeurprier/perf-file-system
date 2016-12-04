@@ -12,9 +12,9 @@ class RecursiveDirectoryRemover
     /**
      *
      *
-     * @var FileSystemWrapper
+     * @var FileSystemClient
      */
-    private $fileSystemWrapper;
+    private $fileSystemClient;
 
     /**
      * Static constructor.
@@ -23,28 +23,28 @@ class RecursiveDirectoryRemover
      */
     public static function createDefault()
     {
-        return new self(new FileSystemWrapper());
+        return new self(FileSystemClient::createDefault());
     }
 
     /**
      * Static constructor.
      *
-     * @param FileSystemWrapper $wrapper
+     * @param FileSystemClient $fileSystemClient
      * @return RecursiveDirectoryRemover
      */
-    public static function create(FileSystemWrapper $wrapper)
+    public static function create(FileSystemClient $fileSystemClient)
     {
-        return new self($wrapper);
+        return new self($fileSystemClient);
     }
 
     /**
      * Constructor.
      *
-     * @param FileSystemWrapper $fileSystemWrapper
+     * @param FileSystemClient $fileSystemClient
      */
-    public function __construct(FileSystemWrapper $fileSystemWrapper)
+    private function __construct(FileSystemClient $fileSystemClient)
     {
-        $this->fileSystemWrapper = $fileSystemWrapper;
+        $this->fileSystemClient = $fileSystemClient;
     }
 
     /**
@@ -59,8 +59,12 @@ class RecursiveDirectoryRemover
     {
         $path = rtrim($path, '\\/');
 
-        if (!$this->fileSystemWrapper->isDirectory($path)) {
-            throw new \InvalidArgumentException('Invalid path provided: expected directory path.');
+        if (!$this->fileSystemClient->fileExists($path)) {
+            throw new \RuntimeException("Cannot remove directory: path {$path} does not exist.");
+        }
+
+        if (!$this->fileSystemClient->isDirectory($path)) {
+            throw new \RuntimeException("Cannot remove directory: path {$path} is not a directory.");
         }
 
         $this->removeDirectory($path);
@@ -87,31 +91,15 @@ class RecursiveDirectoryRemover
 
             $itemPath = "{$path}/{$item}";
 
-            if ($this->fileSystemWrapper->isDirectory($itemPath)) {
+            if ($this->fileSystemClient->isDirectory($itemPath)) {
                 $this->removeDirectory($itemPath);
-            } elseif ($this->fileSystemWrapper->isFile($itemPath) || $this->fileSystemWrapper->isLink($itemPath)) {
-                $this->deleteFile($itemPath);
+            } elseif ($this->fileSystemClient->isFile($itemPath) || $this->fileSystemClient->isLink($itemPath)) {
+                $this->fileSystemClient->delete($path);
             } else {
                 throw new \RuntimeException("Unexpected item type at {$itemPath}.");
             }
         }
 
-        if (!$this->fileSystemWrapper->removeDirectory($path)) {
-            throw new \RuntimeException("Failed to remove directory at {$path}.");
-        }
-    }
-
-    /**
-     *
-     *
-     * @param string $path
-     * @return void
-     * @throws \RuntimeException
-     */
-    private function deleteFile($path)
-    {
-        if (!$this->fileSystemWrapper->delete($path)) {
-            throw new \RuntimeException("Failed to delete file at {$path}.");
-        }
+        $this->fileSystemClient->removeDirectory($path);
     }
 }
